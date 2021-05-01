@@ -42,7 +42,44 @@ void Choice( ){
     cout<<"2.......................  Binaire"<<endl;
     cout<<"3.......................  Hexadecimal"<<endl;
 }
+void vider_buffer(){
+    cin.clear();
+    cin.seekg(0,ios::end);
+    if(!cin.fail()){
+         cin.ignore(numeric_limits<streamsize>::max());
+    } else{
+        cin.clear();
+    }
 
+
+}
+
+int EntierValid(int &number){
+    string temp;
+    stringstream ss,ff,tt;
+
+	while(true){
+    	getline(cin,temp);
+    	if(cin.eof() || cin.bad()){
+                cerr<<"erreur de saisie";
+                if(cin.eof()){
+                   return false;
+                }
+                vider_buffer();
+                continue;
+
+    	}else if(cin.fail()|| temp.find_first_not_of("0123456789")!=string::npos){
+            cerr<<"ce n'est pas un nombre"<<endl;
+            vider_buffer();
+            continue;
+        }
+            ff<<temp;
+            ff>>number;
+            ff.clear();
+           break;
+        }
+
+}
 
 
 
@@ -212,28 +249,30 @@ void DectoHexa(int number ){
             string r_reversed(r);
             reverse( r_reversed.begin(), r_reversed.end());
             cout<<"l'Hexadecimal :"<<r_reversed<<endl;
-
-
         }
-
-
-
 }
 
-void  BintoDecimal(string str, int test ){
+void  BintoDecimal(int number, int test ){
     int t,h;
-    int num,number;
+    int num;
     int dec;
-    string r, text, quo;
+    string r, text, quo,str;
     stringstream ss,ff,tt;
+    ss<<number;
+    ss>>str;
+    ss.clear();
     t=str.length();
     for(int i=0;i<t;i++){
         ff<<str[i];
         ff>>num;
         ff.clear();
         while(num!=0 && num!=1){
-            cout<<"erreur entrer de nouveau le nombre"<<endl;
-            cin>>str;
+            cout<<"veuillez Entrer un nombre binaire"<<endl;
+            cin>>number;
+            EntierValid(number);
+            ss<<number;
+            ss>>str;
+            ss.clear();
             t=str.length();
             for(int i=0;i<t;i++){
                 ff<<str[i];
@@ -275,7 +314,7 @@ void HextoDec(string trem, int test){
     stringstream ss,ff,tt;
     d=trem.length();
     string str[d]={trem};
-     number=0;
+    number=0;
     for(int v=0;v<d;v++){
         tem=trem[v];
         str[v]=tem;
@@ -296,7 +335,7 @@ void HextoDec(string trem, int test){
                              if(str[i]==s[n]){
                                 tt<<str[i];
                                 tt>>num;
-                                dec = num*pow(16,g-1);                               ;
+                                dec = num*pow(16,g-1);
                                 number = number + dec;
                                 g = g-1;
                                 tt.clear();
@@ -307,7 +346,7 @@ void HextoDec(string trem, int test){
                     }
                 }
         }
-     cout<<"le decimal est : "<<number<<endl;
+    cout<<"le decimal est : "<<number<<endl;
     if(test==1){
         DectoOctal(number);
     }else if(test==2){
@@ -330,19 +369,23 @@ int main(){
         Menu();
         cout<<"choissisez pour continuez"<<endl;
         cin>>choix1;
+        EntierValid(choix1);
          temp = "y";
             if(choix1==1){
                 Choice();
                 cout<<"choissisez pour continuez"<<endl;
                 cin>>choix2;
+                EntierValid(choix2);
                 if(choix2==1){
                     while(temp=="y"){
                         ChoiceDecimal();
                         cout<<"choissisez pour continuez"<<endl;
                         cin>>choix3;
+                        EntierValid(choix3);
                         if(choix3==1){
                             cout<<"Entrez le nombre"<<endl;
                             cin>>number;
+                            EntierValid(number);
                             DectoBin(number);
                             cout<<"Voulez-vous continuez? tapez y pour une operation de decode, etc .... ou o pour retourner au menu "<<endl;
                             cin>>temp;
@@ -357,6 +400,7 @@ int main(){
                         }else if(choix3==2){
                             cout<<"Entrez le nombre"<<endl;
                             cin>>number;
+                            EntierValid(number);
                             DectoOctal(number);
                             cout<<"Voulez-vous continuez? tapez y pour une operation de decode, etc .... ou o pour retourner au menu "<<endl;
                             cin>>temp;
@@ -372,6 +416,7 @@ int main(){
                         }else if(choix3==3){
                             cout<<"Entrez le nombre"<<endl;
                             cin>>number;
+                            EntierValid(number);
                             DectoHexa(number);
                             cout<<"Voulez-vous continuez? tapez y pour une operation de decode, etc .... ou o pour retourner au menu "<<endl;
                             cin>>temp;
@@ -393,8 +438,9 @@ int main(){
                             cin>>choix3;
                             if(choix3==1){
                                 cout<<"Entrez le Binaire"<<endl;
-                                cin>>str;
-                                BintoDecimal(str,test);
+                                cin>>number;
+                                EntierValid(number);
+                                BintoDecimal(number,test);
                                 cout<<"Voulez-vous continuez? tapez y pour une operation de decode, etc .... ou o pour retourner au menu "<<endl;
                                 cin>>temp;
                                 if(temp=="y"){
@@ -409,7 +455,7 @@ int main(){
                                 cout<<"Entrez le nombre"<<endl;
                                 test=1;
                                 cin>>str;
-                                BintoDecimal(str,test);
+                                //BintoDecimal(str,test);
                                 cout<<"Voulez-vous continuez? tapez y pour une operation de decode, etc .... ou o pour retourner au menu "<<endl;
                                 cin>>temp;
                                 if(temp=="y"){
@@ -425,7 +471,7 @@ int main(){
                                 cout<<"Entrez le nombre"<<endl;
                                 test=2;
                                 cin>>str;
-                                BintoDecimal(str,test);;
+                                //BintoDecimal(str,test);;
                                 cout<<"Voulez-vous continuez? tapez y pour une operation de decode, etc .... ou o pour retourner au menu "<<endl;
                                 cin>>temp;
                                 if(temp=="y"){
